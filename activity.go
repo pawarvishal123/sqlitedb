@@ -46,14 +46,14 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 			query = strings.Replace(query, "?"+key, "'"+value+"'", -1)
 		}
 	}
-	
+	fmt.Printf("Query: %s\n", query)
 	result, err := db.Exec(query)
 	if err != nil {
-		fmt.Errorf("%q: %s\n", err, query)
+		fmt.Printf("%q: %s\n", err, query)
 		return
 	}
 
-	
+	fmt.Printf("Result: %+v\n", result)
 	context.SetOutput("Result", result)
 	fmt.Printf("Query execution successful..")
 	return true, nil
