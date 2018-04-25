@@ -55,6 +55,6 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 
 	
 	context.SetOutput("Result", result)
-	fmt.Debugf("Query execution successful..")
+	fmt.Printf("Query execution successful..")
 	return true, nil
 }
