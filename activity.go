@@ -5,9 +5,7 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
-	"os"
 	"strings"
-	"encoding/json"
 )
 
 // log is the default package logger
@@ -43,12 +41,12 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 	defer db.Close()
 	
 	if params, ok := context.GetInput("Parameters").(map[string]string); ok && len(params) > 0 {
-		for key, value := range queryParams {
-			query = strings.Replace(query, "?"+key, "'"+value+"'")
+		for key, value := range params {
+			query = strings.Replace(query, "?"+key, "'"+value+"'", -1)
 		}
 	}
 	
-	result, err = db.Exec(query)
+	result, err := db.Exec(query)
 	if err != nil {
 		fmt.Errorf("%q: %s\n", err, query)
 		return
