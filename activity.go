@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
+	"fmt"
 )
 
 // log is the default package logger
