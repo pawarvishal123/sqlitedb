@@ -1,0 +1,31 @@
+{
+  "name": "sqlitedb",
+  "version": "0.0.1",
+  "title": "SQLite DB Operations",
+  "type": "flogo:activity",
+  "ref": "github.com/pawarvishal123/sqlitedb",
+  "description": "Create, insert, update & delete from SQLite DB",
+  "author": "Vishal Pawar <vpawar@tibco.com>",
+  "input":[
+    {
+      "name": "DBName",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "Query",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "Parameters",
+      "type": "params"
+    }
+  ],
+  "output": [
+    {
+      "name": "Result",
+      "type": "object"
+    }
+  ]
+}
