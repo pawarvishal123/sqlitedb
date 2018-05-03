@@ -38,6 +38,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 	db, err := sql.Open("sqlite3", "./"+ dbname +".db")
 	if err != nil {
 		fmt.Errorf("Error while opening DB file - %+v", err)
+		return false, nil
 	}
 	defer db.Close()
 	
@@ -52,12 +53,13 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 		result, err := db.Exec(query)
 		if err != nil {
 			fmt.Printf("%q: %s\n", err, query)
-			return
+			return false, nil
 		}
 
 		rowCnt, err := result.RowsAffected()
  		if err != nil {
 			fmt.Printf(err.Error())
+			return false, nil
  		}
 		context.SetOutput("Result", rowCnt)
 		fmt.Printf("Result: %d\n", rowCnt)
@@ -65,10 +67,12 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 		rows, err := db.Query(query) 
 		if err != nil {
 			fmt.Printf(err.Error())
+			return false, nil
  		}
 		cols, err := rows.Columns()
 		if err != nil {
 			fmt.Printf(err.Error())
+			return false, nil
  		}
 		var result []map[string]interface{}
 		for rows.Next() {
@@ -82,7 +86,8 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     
     			// Scan the result into the column pointers...
     			if err := rows.Scan(columnPointers...); err != nil {
-        			return err
+        			fmt.Printf(err.Error())
+				return false, nil
     			}
 
     			// Create our map, and retrieve the value for each column from the pointers slice,
