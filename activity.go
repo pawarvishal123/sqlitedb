@@ -97,13 +97,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			m := make(map[string]interface{})
     			for i, colName := range cols {
         			val := columnPointers[i].(*interface{})
-				temp := *val
-				fmt.print(temp)
-				if reflect.TypeOf(temp).Kind() == reflect.Array {
-					m[colName] = bytes.NewBuffer(temp).String()
-				} else {
-					m[colName] = *val
-				}
+				m[colName] = *val
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
