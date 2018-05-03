@@ -98,7 +98,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 				m[colName] = *val
 				temp := *val
 				fmt.Print(temp)
-				fmt.Print(temp.(string))
+				fmt.Print(temp.(type))
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
