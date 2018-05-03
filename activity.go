@@ -47,19 +47,58 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 		}
 	}
 	fmt.Printf("Query: %s\n", query)
-	result, err := db.Exec(query)
-	if err != nil {
-		fmt.Printf("%q: %s\n", err, query)
-		return
-	}
+	//if query is not select
+	if strings.Index(query, "select") == -1 {
+		result, err := db.Exec(query)
+		if err != nil {
+			fmt.Printf("%q: %s\n", err, query)
+			return
+		}
 
-	rowCnt, err := result.RowsAffected()
- 	if err != nil {
-		fmt.Printf(err.Error())
- 	}
-	context.SetOutput("Result", rowCnt)
-	fmt.Printf("Result: %d\n", rowCnt)
-	
+		rowCnt, err := result.RowsAffected()
+ 		if err != nil {
+			fmt.Printf(err.Error())
+ 		}
+		context.SetOutput("Result", rowCnt)
+		fmt.Printf("Result: %d\n", rowCnt)
+	} else {
+		rows, err := db.Query(query) 
+		if err != nil {
+			fmt.Printf(err.Error())
+ 		}
+		cols, err := rows.Columns()
+		if err != nil {
+			fmt.Printf(err.Error())
+ 		}
+		var result []map[string]interface{}
+		for rows.Next() {
+    			// Create a slice of interface{}'s to represent each column,
+    			// and a second slice to contain pointers to each item in the columns slice.
+    			columns := make([]interface{}, len(cols))
+    			columnPointers := make([]interface{}, len(cols))
+    			for i, _ := range columns {
+        			columnPointers[i] = &columns[i]
+    			}
+    
+    			// Scan the result into the column pointers...
+    			if err := rows.Scan(columnPointers...); err != nil {
+        			return err
+    			}
+
+    			// Create our map, and retrieve the value for each column from the pointers slice,
+    			// storing it in the map with the name of the column as the key.
+    			m := make(map[string]interface{})
+    			for i, colName := range cols {
+        			val := columnPointers[i].(*interface{})
+        			m[colName] = *val
+    			}
+    
+    			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
+    			fmt.Print(m)
+			result = append(result, m)
+		}
+		context.SetOutput("Result", result)
+	}
 	fmt.Printf("Query execution successful..")
 	return true, nil
 }
