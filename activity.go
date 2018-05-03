@@ -94,8 +94,11 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			// storing it in the map with the name of the column as the key.
     			m := make(map[string]interface{})
     			for i, colName := range cols {
-        			val := columnPointers[i].(*interface{})
-				m[colName] = fmt.Sprintf("%v", *val)
+        			val := columnPointers[i].(*interface{})				
+				m[colName] = *val
+				temp := *val
+				fmt.Print(temp)
+				fmt.Print(temp.(string))
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
