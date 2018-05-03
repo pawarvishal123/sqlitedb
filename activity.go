@@ -7,6 +7,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
 	"fmt"
+	"reflect"
 )
 
 // log is the default package logger
@@ -95,18 +96,38 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			m := make(map[string]interface{})
     			for i, colName := range cols {
         			val := columnPointers[i].(*interface{})				
-				m[colName] = *val
-				temp := *val
-				fmt.Print(temp)
-				fmt.Print(temp.(type))
+					//m[colName] = *val
+					temp := *val
+					//fmt.Print(temp)
+					switch v := temp.(type) {
+					case int64:
+						fmt.Printf("Integer: %v", v)
+						m[colName] = temp
+					case float64:
+						fmt.Printf("Float64: %v", v)
+						m[colName] = temp
+					case string:
+						fmt.Printf("String: %v", v)
+						m[colName] = temp
+					case []uint8:
+						fmt.Printf("%v", temp)
+						str := string(temp.([]byte))
+						fmt.Println(str)
+						m[colName] = str
+					default:
+						fmt.Printf("Unknown type..")
+						var r = reflect.TypeOf(v)
+						fmt.Printf("Other:%v\n", r)
+						m[colName] = temp						
+					}
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
-    			fmt.Print(m)
+    			fmt.Println(m)
 			result = append(result, m)
 		}
 		context.SetOutput("Result", result)
 	}
-	fmt.Printf("Query execution successful..")
+	fmt.Println("Query execution successful..")
 	return true, nil
 }
