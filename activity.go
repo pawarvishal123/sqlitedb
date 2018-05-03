@@ -96,6 +96,8 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			for i, colName := range cols {
         			val := columnPointers[i].(*interface{})
         			m[colName] = *val
+				fmt.Print(val)
+				fmt.Print(*val)
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
