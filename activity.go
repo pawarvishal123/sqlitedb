@@ -53,7 +53,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 		return
 	}
 
-	rowCnt, err := res.RowsAffected()
+	rowCnt, err := result.RowsAffected()
  	if err != nil {
 		fmt.Printf(err.Error())
  	}
