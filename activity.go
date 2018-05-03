@@ -97,8 +97,10 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			m := make(map[string]interface{})
     			for i, colName := range cols {
         			val := columnPointers[i].(*interface{})
-				if reflect.TypeOf(*val) == reflect.Array {
-					m[colName] = bytes.NewBuffer(*val).String()
+				temp := *val
+				fmt.print(temp)
+				if reflect.TypeOf(temp).Kind() == reflect.Array {
+					m[colName] = bytes.NewBuffer(temp).String()
 				} else {
 					m[colName] = *val
 				}
