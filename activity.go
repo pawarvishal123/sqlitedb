@@ -53,8 +53,13 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 		return
 	}
 
-	fmt.Printf("Result: %+v\n", result)
-	context.SetOutput("Result", result)
+	rowCnt, err := res.RowsAffected()
+ 	if err != nil {
+		fmt.Printf(err.Error())
+ 	}
+	context.SetOutput("Result", rowCnt)
+	fmt.Printf("Result: %d\n", rowCnt)
+	
 	fmt.Printf("Query execution successful..")
 	return true, nil
 }
