@@ -75,6 +75,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
 			fmt.Printf(err.Error())
 			return false, nil
  		}
+		defer rows.Close()
 		var result []map[string]interface{}
 		for rows.Next() {
     			// Create a slice of interface{}'s to represent each column,
