@@ -7,8 +7,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"strings"
 	"fmt"
-	"bytes"
-	"reflect"
 )
 
 // log is the default package logger
@@ -97,7 +95,7 @@ func (a *SQLiteDBActivity) Eval(context activity.Context) (done bool, err error)
     			m := make(map[string]interface{})
     			for i, colName := range cols {
         			val := columnPointers[i].(*interface{})
-				m[colName] = *val.(string)
+				m[colName] = fmt.Sprintf("%v", *val)
     			}
     
     			// Outputs: map[columnName:value columnName2:value2 columnName3:value3 ...] 
