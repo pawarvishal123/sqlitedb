@@ -32,7 +32,7 @@ Inputs and Outputs:
   "output": [
     {
       "name": "Result",
-      "type": "object"
+      "type": "any"
     }
   ]
 }
@@ -43,7 +43,7 @@ Inputs and Outputs:
 |:------------|:---------|:------------|
 | DBName  | True     | The name of SQLite DB file |
 | Query       | True     | SQL statement |
-| Parameters     | False     | Parameters used in SQL statement |
+| Parameters     | False     | Parameters used in SQL statement (Please refer below sample input)|
 
 ## Example Inputs
 ```json
